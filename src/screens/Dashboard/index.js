@@ -3,7 +3,7 @@ import { ListAlarms } from '../../components/ListAlarms';
 import { TimePiker } from '../../components/TimePiker';
 import ReactNativeAN from 'react-native-alarm-notification';
 
-import {Container, Header, Text, Content} from './styles';
+import {Container, Header, Logo, Content} from './styles';
 
 export function Dashboard() {
 
@@ -22,7 +22,7 @@ export function Dashboard() {
   return (
     <Container>
       <Header>
-        <Text>alertryber</Text>
+        <Logo source={require('../../assets/logo.png')}/>
       </Header>
       <Content>
         <ListAlarms/>

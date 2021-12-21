@@ -147,7 +147,7 @@ export function TimePiker() {
      
      function closingDayAlert()  {
       if(closingDay.getTime() < currentDate){
-        Alert.alert("Tarde demais!") 
+        Alert.alert("Tarde demais🙃", "Bom descanso!") 
       }else{
         const message = 'Fechamento vai começar!';
         Alert.alert("Encerramento", "Encerramento começa às 19h30?", 

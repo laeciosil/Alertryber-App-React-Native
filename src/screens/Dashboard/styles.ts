@@ -5,6 +5,8 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
    flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
+  align-items: center;
+  justify-content: center;
 `;
 export const Header = styled.View`
   width: 100%;
@@ -15,10 +17,8 @@ export const Header = styled.View`
   align-items: center;
   flex-direction: row;
 `;
-export const Text = styled.Text`
- color: ${({ theme }) => theme.colors.shape};
-  font-size: ${RFValue(30)}px;
-  font-weight: bold;
+export const Logo = styled.Image`
+ 
 `;
 
 export const Content = styled.View`
