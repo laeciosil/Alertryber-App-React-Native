@@ -24,13 +24,13 @@ export function AlarmItem({data}: IDataProps) {
   useEffect(() => {
     let hour = '';
     if(+data.hour < 10 && +data.minute < 10){
-      hour =`0${data.hour}:0${data.minute + 1}`;
+      hour =`0${data.hour}:0${data.minute }`;
     }else if(+data.hour < 10 && +data.minute > 9){
-     hour =`0${data.hour}:${data.minute + 1}`;
+     hour =`0${data.hour}:${data.minute}`;
     }else if(+data.hour >= 10 && +data.minute <= 9){
-      hour =`${data.hour}:0${data.minute + 1}`;
+      hour =`${data.hour}:0${data.minute}`;
      }else {
-      hour= `${data.hour}:${data.minute + 1}`;
+      hour= `${data.hour}:${data.minute}`;
     }
     setHourFormatted(hour);
     

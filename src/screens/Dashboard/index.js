@@ -12,11 +12,15 @@ export function Dashboard() {
    
     const a = await ReactNativeAN.getScheduledAlarms();
     for (let i = 0; i < a.length; i++) {
-      console.log('alarm', a[i],"\n");
+      console.log('alarm', a[i].message,"\n");
     }
     
-    
-
+    // const message = 'Aula ao vivo vai começar!';
+    // const alarmFind = a.find(alarm => alarm.message === message);
+    // if(alarmFind){
+    //   console.log('alarm', alarmFind);
+    // }
+    // console.log('alarm', alarmFind); 
   }
   handleAddAlarm() 
   return (
