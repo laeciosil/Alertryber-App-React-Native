@@ -15,6 +15,7 @@ export function Dashboard() {
       console.log('alarm', a[i].message,"\n");
     }
     
+    console.log(a.length)
     // const message = 'Aula ao vivo vai começar!';
     // const alarmFind = a.find(alarm => alarm.message === message);
     // if(alarmFind){

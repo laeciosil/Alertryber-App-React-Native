@@ -10,9 +10,20 @@ import {
   Title 
 } from './styles';
 
-export function TimePiker() {
+export  function TimePiker() {
   const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
-  const [msgAlarm, setMsgAlarm] = useState('');
+  const [dateToday, setDateToday] = useState('');
+  const [currentDate, setCurrentDate] = useState('');
+  const [dataAlarm, setDataAlarm] = useState({});
+  
+  useEffect(() => {
+    const currentDate = new Date();
+    const today = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate() + 1}`;
+    setCurrentDate(currentDate.getTime());
+    setDateToday(today);
+  }, []);
+
+ 
   function showDateTimePicker(){
     setDateTimePickerVisibility(true);
   };
@@ -21,22 +32,24 @@ export function TimePiker() {
     setDateTimePickerVisibility(false);
   };
 
-  async function handleCreateAlarm(fireDate, messageAlarm){ {
-    
+  async function handleCreateAlarm(isoDate, messageAlarm){ 
+  
+    const fireDate = ReactNativeAN.parseDate(isoDate);
     try {
-     const alarm = await ReactNativeAN.scheduleAlarm({fire_date: fireDate},  messageAlarm);
-      console.log('alarm', alarm);
+     await ReactNativeAN.scheduleAlarm(
+       {fire_date: fireDate},  
+       messageAlarm
+      );
     } catch (error) {
       console.log('Failed to schedule alarm: ', error);
     }
 
     hideDateTimePicker();
   };
-  }
 
-  function handleHourPikedUser(datePiked) {
-    let minutes = datePiked.getMinutes();
-    let hours = datePiked.getHours() + 3; // +3 to Brazil time
+  function minutesMinusTen(isoDate) {
+    let minutes = isoDate.getMinutes();
+    let hours = isoDate.getHours() + 3; // para compensar o fuso horário
     
     if (minutes <= 9) {
       minutes = `5${minutes}`;
@@ -49,37 +62,184 @@ export function TimePiker() {
      minutes = `0${minutes}`;
     }
 
-    const hourAlarm = `${hours}${minutes}`;
+     return new Date(`${isoDate.getFullYear()}-${isoDate.getMonth() + 1}-${isoDate.getDate()}T${hours}:${minutes}:00.000Z`);
     
-    console.log('hourAlarm', hourAlarm);
-    if(msgAlarm === 'Aula ao vivo vai começar!' && (hourAlarm > 1830 && hourAlarm < 1930)){
-      addAlarm();
-    }else {
-      Alert.alert(
-        'Hora fora do padrão de 15h30 até 16h30!',
-        'Realmente deseja adicionar!',
-        [
-          {text: 'Não',  onPress: () => {handleOptions()}},
-          {text: 'Sim', onPress: () => {addAlarm(), handleOptions()}},
-        ],
-        
-      );
-    }
-
-    if(msgAlarm === 'Fechamento vai começar!' && (hourAlarm > 2200 && hourAlarm < 2300)){
-      addAlarm();
+  }
+  
+  async function initialMentoringAlert(){
+    const alarms = await ReactNativeAN.getScheduledAlarms()
+    const initialMentoringData = {
+      fireDate: new Date(`${dateToday}T15:50:00.000Z`),//12:50:00,
+      message: 'A mentoria das 13h00 vai começar!'
+    };
+    const alarmFind = alarms.find(alarm => alarm.message === initialMentoringData.message);
+    console.log('alarm', alarmFind);
+    if(initialMentoringData.fireDate.getTime() < currentDate || alarmFind){
+     initialMomentAlert();
     }else{
-      Alert.alert(
-        'Hora fora do padrão de 19h00 até 20h00!',
-        'Realmente deseja adicionar!',
+      Alert.alert("Mentorias Técnicas das 13h00", "Deseja adicionar?", 
+      [
+        {text: "Não", onPress: () => initialMomentAlert()},
+        {text: "Sim", onPress: () => 
+          {
+            handleCreateAlarm(
+              initialMentoringData.fireDate, 
+              initialMentoringData.message),
+              initialMomentAlert()
+          }
+        },
+      ]
+    );
+    }
+  };
+
+  async function initialMomentAlert() {
+    const alarms = await ReactNativeAN.getScheduledAlarms()
+    const initialMomentData = {
+     fireDate: new Date(`${dateToday}T16:50:00.000Z`),//13:50:00
+     message: 'Momento inicial vai começar!',
+    }
+    const alarmFind = alarms.find(alarm => alarm.message === initialMomentData.message);
+    if(initialMomentData.fireDate.getTime() < currentDate || alarmFind){
+      liveClassAlert();
+    }else{
+      handleCreateAlarm(initialMomentData.fireDate, initialMomentData.message);
+      liveClassAlert();
+    }
+  };
+
+  async function liveClassAlert(datePiked) {
+    const alarms = await ReactNativeAN.getScheduledAlarms()
+    const liveClassData = {
+      fireDate: datePiked || new Date(`${dateToday}T19:10:00.000Z`),//16:10:00
+      message: 'Aula ao vivo vai começar!',
+    }
+    // if(hourAlarm > 1830 && hourAlarm < 1930){
+    //   addAlarm();
+    // }else {
+    //   Alert.alert(
+    //     'Hora fora do padrão de 15h30 até 16h30!',
+    //     'Realmente deseja adicionar!',
+    //     [
+    //       {text: 'Não',  onPress: () => {handleOptions()}},
+    //       {text: 'Sim', onPress: () => {addAlarm(), handleOptions()}},
+    //     ],
+        
+    //   );
+    // }
+    if(datePiked){
+      handleCreateAlarm(liveClassData.fireDate, liveClassData.message)
+      finalMentoringAlert();
+      return;
+    }
+    setDataAlarm(liveClassData);
+    const alarmFind = alarms.find(alarm => alarm.message === liveClassData.message);
+    if(liveClassData.fireDate.getTime() < currentDate || alarmFind){
+       finalMentoringAlert();
+    }else{
+   
+      Alert.alert("Aula ao vivo", "Aula ao vivo começa às 16:20?", 
         [
-          {text: 'Não',  onPress: () => {handleOptions()}},
-          {text: 'Sim', onPress: () => {addAlarm(), handleOptions()}},
-        ],
+          {text: "Não", onPress: () => {showDateTimePicker()}},
+          {text: "Sim", onPress: () => 
+            {
+            handleCreateAlarm(
+              liveClassData.fireDate, 
+              liveClassData.message
+              ), 
+              finalMentoringAlert()
+            }
+          },
+        ]
       );
-      
+    }
+  };
+
+  async function finalMentoringAlert()  {
+    const alarms = await ReactNativeAN.getScheduledAlarms()
+    const finalMentoringData = {
+     fireDate: new Date(`${dateToday}T21:20:00.000Z`),//18:20:00
+     message: 'A mentoria das 18h20 vai começar!',
+    }
+    const alarmFind = alarms.find(alarm => alarm.message === finalMentoringData.message);
+    
+    if(finalMentoringData.fireDate.getTime() < currentDate || alarmFind){
+      closingDayAlert();
+    }else{
+      Alert.alert("Mentorias Técnicas 18h30", "Deseja adicionar?", 
+      [
+        {text: "Não", onPress: () => closingDayAlert()},
+          {text: "Sim", onPress: () =>{
+            handleCreateAlarm(
+              finalMentoringData.fireDate, 
+              finalMentoringData.message
+              ),
+               closingDayAlert()
+              }
+          }
+      ]);
+    }
+  };
+   
+  async function closingDayAlert(datePiked)  {
+    
+    const closingDayData = {
+      fireDate:  datePiked || new Date(`${dateToday}T22:20:00.000Z`),//19:20:00
+      message: 'Fechamento vai começar!',
+    }
+    if(datePiked){
+      handleCreateAlarm(closingDayData.fireDate, closingDayData.message)
+      Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!");
+      return;
+    }
+    setDataAlarm(closingDayData);
+    
+      const alarms = await ReactNativeAN.getScheduledAlarms()
+      const alarmFind = alarms.find(alarm => alarm.message === closingDayData.message);
+        
+      if(alarmFind){
+          Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!")
+      } else if(closingDayData.fireDate.getTime() < currentDate){
+          Alert.alert("Tarde demais tryber🙃", "Bom descanso!") 
+      }else{
+          
+          Alert.alert("Encerramento", "Encerramento começa às 19h30?", 
+          [
+          {text: "Não", onPress: () => showDateTimePicker()},
+          {text: "Sim", onPress: () => handleCreateAlarm(closingDayData.fireDate, closingDayData.message)},
+          ]);
+      }
+    
+  } 
+ 
+  function handleHourPikedUser(datePiked) {
+    const a = minutesMinusTen(datePiked);
+    console.log('a', a);
+    hideDateTimePicker();
+    if(dataAlarm.message === 'Aula ao vivo vai começar!'){
+      liveClassAlert(a);
+    }else{
+      closingDayAlert(a)
     }
     
+    
+    // console.log('hourAlarm', hourAlarm);
+    
+
+    // if(msgAlarm === 'Fechamento vai começar!' && (hourAlarm > 2200 && hourAlarm < 2300)){
+    //   addAlarm();
+    // }else{
+    //   Alert.alert(
+    //     'Hora fora do padrão de 19h00 até 20h00!',
+    //     'Realmente deseja adicionar!',
+    //     [
+    //       {text: 'Não',  onPress: () => {handleOptions()}},
+    //       {text: 'Sim', onPress: () => {addAlarm(), handleOptions()}},
+    //     ],
+    //   );
+      
+  }
+      
     function addAlarm() {
         const date = `${datePiked.getFullYear()}-${datePiked.getMonth() + 1}-${datePiked.getDate()}T${hours}:${minutes}:00.000Z`;
       const currentDate = Date.now();
@@ -95,125 +255,17 @@ export function TimePiker() {
      handleCreateAlarm(fireDate, msgAlarm);
 
     }
-  }
-
-  function verifyDate(datePiked, message ) {
-    let messageAlarm = message;
-   
-    if(datePiked === ''){
-     
-      setMsgAlarm(messageAlarm);
-      showDateTimePicker()
-     
-    } else {
-      const fireDate = ReactNativeAN.parseDate(datePiked);
-      handleCreateAlarm(fireDate, messageAlarm);
-    }
-    
-  }
   
-
-  async function handleOptions(){
-     //21-12-2021 08:27:0
-     const date = new Date();
-     const currentDate = Date.now();
-     const alarmDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() + 1}`;
-     
-      //hora no formato iso.
-     const initialTechnicalMentoring = new Date(`${alarmDate}T15:50:00.000Z`)//12:50:00
-     const initialMoment = new Date(`${alarmDate}T16:50:00.000Z`)//13:50:00
-     const liveClass =  new Date(`${alarmDate}T19:10:00.000Z`)//16:10:00
-     const finalTechnicalMentoring = new Date(`${alarmDate}T21:20:00.000Z`)//18:20:00
-     const closingDay =  new Date(`${alarmDate}T22:20:00.000Z`)//19:20:00
-    
-    const alarmList = await ReactNativeAN.getScheduledAlarms();
-
-    initialMentoringAlert();
-
-    function initialMentoringAlert(){
-      const message = 'A mentoria das 13h00 vai começar!';
-      const alarmFind = alarmList.find(alarm => alarm.message === message);
-
-      if(initialTechnicalMentoring.getTime() < currentDate || alarmFind){
-       initialMomentAlert()
-      }else{
-        Alert.alert("Mentorias Técnicas das 13h00", "Deseja adicionar?", 
-        [
-        {text: "Não", onPress: () => {initialMomentAlert()}},
-        {text: "Sim", onPress: () => {verifyDate(initialTechnicalMentoring, message), initialMomentAlert()}},
-        ]
-      );
-      }
-    }
-    function initialMomentAlert () {
-      const message = 'Momento inicial vai começar!';
-      const alarmFind = alarmList.find(alarm => alarm.message === message);
-      if(initialMoment.getTime() < currentDate || alarmFind){
-        liveClassAlert();
-      }else{
-      
-      verifyDate(initialMoment, message);
-      liveClassAlert();
-      }
-    };
-    function liveClassAlert() {
-      const message = 'Aula ao vivo vai começar!';
-      const alarmFind = alarmList.find(alarm => alarm.message === message);
-      if(liveClass.getTime() < currentDate || alarmFind){
-        finalMentoringAlert();
-      }else{
-     
-      Alert.alert("Aula ao vivo", "Aula ao vivo começa às 16:20?", 
-      [
-      {text: "Não", onPress: () => {verifyDate('', message), finalMentoringAlert()}},
-      {text: "Sim", onPress: () => {verifyDate(liveClass, message), finalMentoringAlert()}},
-      ]
-      );
-    }
-    }
-    function finalMentoringAlert()  {
-      const message = 'A mentoria das 18h30  vai começar!';
-      const alarmFind = alarmList.find(alarm => alarm.message === message);
-      
-      if(finalTechnicalMentoring.getTime() < currentDate || alarmFind){
-        closingDayAlert();
-      }else{
-        Alert.alert("Mentorias Técnicas 18h30", "Deseja adicionar?", 
-        [
-          {text: "Não", onPress: () => closingDayAlert()},
-            {text: "Sim", onPress: () =>{verifyDate(finalTechnicalMentoring, message), closingDayAlert()}}
-        ]);
-      }
-     }
-     
-     function closingDayAlert()  {
-       const message = 'Fechamento vai começar!';
-       const alarmFind = alarmList.find(alarm => alarm.message === message);
-      if(alarmFind){
-        Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!")
-      } else if(closingDay.getTime() < currentDate){
-        Alert.alert("Tarde demais tryber🙃", "Bom descanso!") 
-      }else{
-        
-        Alert.alert("Encerramento", "Encerramento começa às 19h30?", 
-        [
-        {text: "Não", onPress: () => verifyDate('', message)},
-        {text: "Sim", onPress: () => verifyDate(closingDay, message)},
-        ]);
-     }
-     } 
-  }
- 
 
   return (
     <Container>
-      <Button onPress={handleOptions}>
+      <Button onPress={initialMentoringAlert}>
         <Title>Criar agenda do dia</Title>
       </Button>
       <DateTimePicker
         isVisible={isDateTimePickerVisible}
         onConfirm={handleHourPikedUser}
-        onCancel={hideDateTimePicker}
+        onCancel={handleHourPikedUser}
         mode="time"
         is24Hour={true}
       />
