@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import ReactNativeAN from '../../react-native-alarm-notification';
-//import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { 
   Container, 
@@ -10,7 +9,7 @@ import {
   Title 
 } from './styles';
 
-export  function TimePiker() {
+export  function CreateAlarms() {
   const [isDateTimePickerVisible, setDateTimePickerVisibility] = useState(false);
   const [dateToday, setDateToday] = useState('');
   const [currentDate, setCurrentDate] = useState('');
@@ -18,7 +17,7 @@ export  function TimePiker() {
   
   useEffect(() => {
     const currentDate = new Date();
-    const today = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate() + 1}`;
+    const today = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
     setCurrentDate(currentDate.getTime());
     setDateToday(today);
   }, []);
@@ -49,8 +48,15 @@ export  function TimePiker() {
 
   function minutesMinusTen(isoDate) {
     let minutes = isoDate.getMinutes();
-    let hours = isoDate.getHours() + 3; // para compensar o fuso horário
+    let hours = isoDate.getHours()
+
+    // para compensar o fuso horário
+    if (hours <= 20) hours += 3;
+    else if (hours ===  21) hours += 2;
+    else if (hours ===  22) hours += 1;
     
+    if(hours > 23) return;
+
     if (minutes <= 9) {
       minutes = `5${minutes}`;
       hours -= 1;
@@ -62,10 +68,21 @@ export  function TimePiker() {
      minutes = `0${minutes}`;
     }
 
-     return new Date(`${isoDate.getFullYear()}-${isoDate.getMonth() + 1}-${isoDate.getDate()}T${hours}:${minutes}:00.000Z`);
+    return new Date(`${isoDate.getFullYear()}-${isoDate.getMonth() + 1}-${isoDate.getDate()}T${hours}:${minutes}:00.000Z`);
     
   }
-  
+
+  function zeroInMinutes(isoDate) {
+    let minutes = isoDate.getMinutes();
+      
+    if (minutes <= 9) {
+      minutes = `0${minutes}`;
+    } else{
+      minutes = `${minutes}`;
+    }
+    return minutes;
+  }
+
   async function initialMentoringAlert(){
     const alarms = await ReactNativeAN.getScheduledAlarms()
     const initialMentoringData = {
@@ -73,7 +90,7 @@ export  function TimePiker() {
       message: 'A mentoria das 13h00 vai começar!'
     };
     const alarmFind = alarms.find(alarm => alarm.message === initialMentoringData.message);
-    console.log('alarm', alarmFind);
+
     if(initialMentoringData.fireDate.getTime() < currentDate || alarmFind){
      initialMomentAlert();
     }else{
@@ -114,23 +131,49 @@ export  function TimePiker() {
       fireDate: datePiked || new Date(`${dateToday}T19:10:00.000Z`),//16:10:00
       message: 'Aula ao vivo vai começar!',
     }
-    // if(hourAlarm > 1830 && hourAlarm < 1930){
-    //   addAlarm();
-    // }else {
-    //   Alert.alert(
-    //     'Hora fora do padrão de 15h30 até 16h30!',
-    //     'Realmente deseja adicionar!',
-    //     [
-    //       {text: 'Não',  onPress: () => {handleOptions()}},
-    //       {text: 'Sim', onPress: () => {addAlarm(), handleOptions()}},
-    //     ],
-        
-    //   );
-    // }
+    
     if(datePiked){
-      handleCreateAlarm(liveClassData.fireDate, liveClassData.message)
-      finalMentoringAlert();
-      return;
+      const hourPiked = datePiked.getHours();
+      const minutesPiked = zeroInMinutes(datePiked);
+      if(hourPiked >= 15 && hourPiked < 17){
+        handleCreateAlarm(liveClassData.fireDate, liveClassData.message)
+        finalMentoringAlert();
+        return;
+      }
+      if(hourPiked >= 18){
+       
+        Alert.alert(
+          'Olá Tryber!',
+          `Não é possível adicionar para depois das 18h00!`,
+          [
+            {text: 'Escolher novamente',  onPress: () =>  showDateTimePicker()},
+            {text: 'Proximo', onPress: () => {
+              finalMentoringAlert();
+              return;
+            }},
+          ],
+          
+        );
+        return
+        
+        
+      } else{
+        Alert.alert(
+          'Hora fora do padrão de 15h30 até 16h30!',
+          `Realmente deseja adicionar para ${datePiked.getHours()}:${minutesPiked}?`,
+          [
+            {text: 'Escolher novamente',  onPress: () =>  showDateTimePicker()},
+            {text: 'Sim', onPress: () => {
+              handleCreateAlarm(liveClassData.fireDate, liveClassData.message)
+              finalMentoringAlert();
+              return;
+            }},
+          ],
+          
+        );
+        return
+      }
+     
     }
     setDataAlarm(liveClassData);
     const alarmFind = alarms.find(alarm => alarm.message === liveClassData.message);
@@ -188,9 +231,41 @@ export  function TimePiker() {
       message: 'Fechamento vai começar!',
     }
     if(datePiked){
-      handleCreateAlarm(closingDayData.fireDate, closingDayData.message)
-      Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!");
-      return;
+      const hourPiked = datePiked.getHours();
+      const minutesPiked = zeroInMinutes(datePiked);
+      if(`${hourPiked}:${minutesPiked}` >= '18:50' && hourPiked < 20){
+        handleCreateAlarm(closingDayData.fireDate, closingDayData.message);
+        Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!");
+        return;
+      }
+      if(hourPiked >= 20){
+        Alert.alert(
+          'Olá Tryber!',
+          `Não é possível adicionar para depois das 20h00!`,
+          [
+            {text: 'Escolher novamente',  onPress: () =>  showDateTimePicker()},
+            {text: 'Não adicionar', onPress: () => {return}},
+          ],
+          
+        );
+        return;
+      } else{
+        Alert.alert(
+          'Hora fora do padrão de 19h00 até 19h45!',
+          `Realmente deseja adicionar para ${datePiked.getHours()}:${minutesPiked}?`,
+          [
+            {text: 'Escolher novamente',  onPress: () =>  showDateTimePicker()},
+            {text: 'Sim', onPress: () => {
+              handleCreateAlarm(closingDayData.fireDate, closingDayData.message)
+              finalMentoringAlert();
+              return;
+            }},
+          ],
+          
+        );
+        return
+      }
+     
     }
     setDataAlarm(closingDayData);
     
@@ -198,65 +273,42 @@ export  function TimePiker() {
       const alarmFind = alarms.find(alarm => alarm.message === closingDayData.message);
         
       if(alarmFind){
-          Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!")
+          Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!");
       } else if(closingDayData.fireDate.getTime() < currentDate){
           Alert.alert("Tarde demais tryber🙃", "Bom descanso!") 
       }else{
           
-          Alert.alert("Encerramento", "Encerramento começa às 19h30?", 
+        Alert.alert("Encerramento", "Encerramento começa às 19h30?", 
           [
-          {text: "Não", onPress: () => showDateTimePicker()},
-          {text: "Sim", onPress: () => handleCreateAlarm(closingDayData.fireDate, closingDayData.message)},
+            {text: "Não", onPress: () => showDateTimePicker()},
+            {text: "Sim", onPress: () => handleCreateAlarm(closingDayData.fireDate, closingDayData.message)},
           ]);
       }
-    
   } 
  
   function handleHourPikedUser(datePiked) {
-    const a = minutesMinusTen(datePiked);
-    console.log('a', a);
     hideDateTimePicker();
-    if(dataAlarm.message === 'Aula ao vivo vai começar!'){
-      liveClassAlert(a);
-    }else{
-      closingDayAlert(a)
-    }
-    
-    
-    // console.log('hourAlarm', hourAlarm);
-    
+    const liveClassMessage ='Aula ao vivo vai começar!';
 
-    // if(msgAlarm === 'Fechamento vai começar!' && (hourAlarm > 2200 && hourAlarm < 2300)){
-    //   addAlarm();
-    // }else{
-    //   Alert.alert(
-    //     'Hora fora do padrão de 19h00 até 20h00!',
-    //     'Realmente deseja adicionar!',
-    //     [
-    //       {text: 'Não',  onPress: () => {handleOptions()}},
-    //       {text: 'Sim', onPress: () => {addAlarm(), handleOptions()}},
-    //     ],
-    //   );
-      
-  }
-      
-    function addAlarm() {
-        const date = `${datePiked.getFullYear()}-${datePiked.getMonth() + 1}-${datePiked.getDate()}T${hours}:${minutes}:00.000Z`;
-      const currentDate = Date.now();
-      const alarmDate = new Date(date);
-      console.log(alarmDate)
-      const fireDate = ReactNativeAN.parseDate(alarmDate);
-    
-      if(alarmDate.getTime() < currentDate){
-        Alert.alert('Não é possível agendar uma data anterior a data atual🤨');
-        hideDateTimePicker();
-        return; 
+    if(datePiked) {
+      const alarmDate = minutesMinusTen(datePiked);
+      if(dataAlarm.message === liveClassMessage  && alarmDate){
+        liveClassAlert(alarmDate);
+
+      }else if (dataAlarm.message !== liveClassMessage && alarmDate){
+        closingDayAlert(alarmDate);
       }
-     handleCreateAlarm(fireDate, msgAlarm);
-
+      return;
     }
-  
 
+    if(dataAlarm.message === 'Aula ao vivo vai começar!'){
+      liveClassAlert();
+    }else{
+      closingDayAlert();
+    }
+    
+  }
+  
   return (
     <Container>
       <Button onPress={initialMentoringAlert}>

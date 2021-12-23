@@ -24,7 +24,7 @@ export const Date = styled.Text`
 `;
 
 export const Button = styled.TouchableOpacity`
-  background-color: red;
+  background-color: ${({ theme }) => theme.colors.buttonCancel};
   align-items: center;
   justify-content: center;
   padding: 0 20px;
@@ -32,6 +32,6 @@ export const Button = styled.TouchableOpacity`
 `;
 
 export const Title = styled.Text`
-    color: #FFFFFF;
+    color: #000;
     font-size: 18px;
 `;

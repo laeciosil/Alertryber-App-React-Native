@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ReactNativeAN from 'react-native-alarm-notification';
+import ReactNativeAN from '../../react-native-alarm-notification';
 
 import { Container, Time, Hour, Date, Button, Title } from "./styles";
 
