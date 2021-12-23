@@ -10,6 +10,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.emekalites.react.alarm.notification.ANPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage; 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 

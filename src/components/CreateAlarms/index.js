@@ -274,7 +274,7 @@ export  function CreateAlarms() {
         
       if(alarmFind){
           Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!");
-      } else if(closingDayData.fireDate.getTime() < currentDate){
+      } else if(currentDate > 19){
           Alert.alert("Tarde demais tryber🙃", "Bom descanso!") 
       }else{
           

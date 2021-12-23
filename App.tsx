@@ -1,6 +1,3 @@
-import 'intl';
-import 'intl/locale-data/jsonp/pt-BR';
-
 import React from 'react';
 import {Dashboard} from './src/screens/Dashboard';
 import {ThemeProvider} from 'styled-components';

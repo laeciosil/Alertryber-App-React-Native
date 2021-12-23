@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ListAlarms } from '../../components/ListAlarms';
 import { CreateAlarms } from '../../components/CreateAlarms';
+import ReactNativeAN from '../../react-native-alarm-notification';
 import {
   Container, 
   Header, 
   Logo, 
-  Content} 
-from './styles';
+  Content
+}from './styles';
 
 export function Dashboard() {
+
   return (
     <Container>
       <Header>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "812723086182",
+    "project_id": "alertryber",
+    "storage_bucket": "alertryber.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812723086182:android:b485a4573f7c2b0f4c9ea7",
+        "android_client_info": {
+          "package_name": "com.alertryber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812723086182-psjeilfg0b4hmb0t5gbrouqgfno1cjn9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXSIi8v0ltASTP6pQl6WdQhuLfCb20onk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812723086182-psjeilfg0b4hmb0t5gbrouqgfno1cjn9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
