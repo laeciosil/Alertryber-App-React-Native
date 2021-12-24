@@ -199,7 +199,7 @@ export  function CreateAlarms() {
   };
 
   async function finalMentoringAlert()  {
-    const alarms = await ReactNativeAN.getScheduledAlarms()
+    const alarms = await ReactNativeAN.getScheduledAlarms();
     const finalMentoringData = {
      fireDate: new Date(`${dateToday}T21:20:00.000Z`),//18:20:00
      message: 'A mentoria das 18h20 vai começar!',
@@ -225,7 +225,7 @@ export  function CreateAlarms() {
   };
    
   async function closingDayAlert(datePiked)  {
-    
+    const hourLimit = new Date(`${dateToday}T23:00:00.000Z`)
     const closingDayData = {
       fireDate:  datePiked || new Date(`${dateToday}T22:20:00.000Z`),//19:20:00
       message: 'Fechamento vai começar!',
@@ -274,7 +274,7 @@ export  function CreateAlarms() {
         
       if(alarmFind){
           Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!");
-      } else if(currentDate > 19){
+      } else if(hourLimit < currentDate){
           Alert.alert("Tarde demais tryber🙃", "Bom descanso!") 
       }else{
           

@@ -17,6 +17,7 @@
     "react-native-modal-datetime-picker": "^13.0.0",
     "react-native-push-notification": "^8.1.1",
     "react-native-responsive-fontsize": "^0.5.1",
+    "react-native-splash-screen": "^3.3.0",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
