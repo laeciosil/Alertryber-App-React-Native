@@ -149,6 +149,19 @@ export  function CreateAlarms() {
     }
     
     if(datePiked){
+      if(datePiked < currentDate) {
+        Alert.alert(
+          'Olá Tryber!',
+          `Não é possível adicionar no passado!😆`,
+          [
+            {text: 'Escolher novamente',  onPress: () =>  showDateTimePicker()},
+            {text: 'Próximo', onPress: () => {finalMentoringAlert()}},
+          ],
+          
+        );
+        return;
+      }
+
       const hourPiked = datePiked.getHours();
       const minutesPiked = zeroInMinutes(datePiked);
       if(hourPiked >= 15 && hourPiked < 17){
@@ -250,7 +263,8 @@ export  function CreateAlarms() {
     if(datePiked){
       const hourPiked = datePiked.getHours();
       const minutesPiked = zeroInMinutes(datePiked);
-      if(hourPiked < currentDate) {
+      console.log(hourPiked)
+      if(datePiked < currentDate) {
         Alert.alert(
           'Olá Tryber!',
           `Não é possível adicionar no passado!😆`,
