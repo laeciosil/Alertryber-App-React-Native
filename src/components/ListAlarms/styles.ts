@@ -9,6 +9,7 @@ interface IDataProps  {
   month: string;
   year: string;
   minute: string;
+  message: string;
 }
 
 

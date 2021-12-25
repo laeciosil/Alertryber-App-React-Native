@@ -19,7 +19,7 @@ export  function CreateAlarms() {
   
   useEffect(() => {
     const currentDate = new Date();
-    const today = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+    const today = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate() + 1}`;
     setCurrentDate(currentDate.getTime());
     setDateToday(today);
   }, []);
@@ -52,7 +52,7 @@ export  function CreateAlarms() {
     const alarms = await ReactNativeAN.getScheduledAlarms()
     const initialMentoringData = {
       fireDate: new Date(`${dateToday}T15:50:00.000Z`),//12:50:00,
-      message: 'A mentoria das 13h00 vai começar!'
+      message: 'Mentoria das 13h00 vai começar!'
     };
     const alarmFind = alarms.find(alarm => alarm.message === initialMentoringData.message);
 
@@ -180,7 +180,7 @@ export  function CreateAlarms() {
     const alarms = await ReactNativeAN.getScheduledAlarms();
     const finalMentoringData = {
      fireDate: new Date(`${dateToday}T21:20:00.000Z`),//18:20:00
-     message: 'A mentoria das 18h20 vai começar!',
+     message: 'Mentoria das 18h30 vai começar!',
     }
     const alarmFind = alarms.find(alarm => alarm.message === finalMentoringData.message);
     
