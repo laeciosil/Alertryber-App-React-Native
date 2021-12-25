@@ -25,4 +25,5 @@ export const Content = styled.View`
   flex: 1;
   justify-content: space-between;
   padding: 0 24px;
+ 
 `;

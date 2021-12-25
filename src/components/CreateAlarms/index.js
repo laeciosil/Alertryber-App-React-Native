@@ -19,7 +19,7 @@ export  function CreateAlarms() {
   
   useEffect(() => {
     const currentDate = new Date();
-    const today = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate() + 1}`;
+    const today = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
     setCurrentDate(currentDate.getTime());
     setDateToday(today);
   }, []);
@@ -122,7 +122,7 @@ export  function CreateAlarms() {
        
         Alert.alert(
           'Olá Tryber!',
-          `Não é possível adicionar para depois das 18h00!`,
+          `Não é possível adicionar para depois das 18h00!😆`,
           [
             {text: 'Escolher novamente',  onPress: () =>  showDateTimePicker()},
             {text: 'Proximo', onPress: () => {
@@ -137,7 +137,7 @@ export  function CreateAlarms() {
         
       } else{
         Alert.alert(
-          'Hora fora do padrão de 15h30 até 16h30!',
+          'Hora fora do padrão de 15h30 até 16h30!🤔',
           `Realmente deseja adicionar para ${datePiked.getHours()}:${minutesPiked}?`,
           [
             {text: 'Escolher novamente',  onPress: () =>  showDateTimePicker()},
@@ -227,13 +227,13 @@ export  function CreateAlarms() {
       }
       if(`${hourPiked}:${minutesPiked}` >= '18:50' && hourPiked < 20){
         handleCreateAlarm(closingDayData.fireDate, closingDayData.message);
-        Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!");
+        Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV! 🚀");
         return;
       }
       if(hourPiked >= 20){
         Alert.alert(
           'Olá Tryber!',
-          `Não é possível adicionar para depois das 20h00!`,
+          `Não é possível adicionar para depois das 20h00!😆`,
           [
             {text: 'Escolher novamente',  onPress: () =>  showDateTimePicker()},
             {text: 'Não adicionar', onPress: () => {return}},
@@ -243,7 +243,7 @@ export  function CreateAlarms() {
         return;
       } else{
         Alert.alert(
-          'Hora fora do padrão de 19h00 até 19h45!',
+          'Hora fora do padrão de 19h00 até 19h45! 🤔',
           `Realmente deseja adicionar para ${datePiked.getHours()}:${minutesPiked}?`,
           [
             {text: 'Escolher novamente',  onPress: () =>  showDateTimePicker()},
@@ -265,12 +265,12 @@ export  function CreateAlarms() {
       const alarmFind = alarms.find(alarm => alarm.message === closingDayData.message);
         
       if(alarmFind){
-          Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV!");
+          Alert.alert("Tudo certo tryber!", "Agenda ok, #VQV! 🚀");
       } else if(hourLimit < currentDate){
-          Alert.alert("Tarde demais tryber🙃", "Bom descanso!") 
+          Alert.alert("Tarde demais tryber🙃", "Bom descanso! 😴") 
       }else{
           
-        Alert.alert("Encerramento", "Encerramento começa às 19h30?", 
+        Alert.alert("Fechamento do dia", "Fechamento começa às 19h30?", 
           [
             {text: "Não", onPress: () => showDateTimePicker()},
             {text: "Sim", onPress: () => handleCreateAlarm(closingDayData.fireDate, closingDayData.message)},
