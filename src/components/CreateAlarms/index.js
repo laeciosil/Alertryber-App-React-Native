@@ -203,7 +203,7 @@ export  function CreateAlarms() {
   };
    
   async function closingDayAlert(datePiked)  {
-    console.log(datePiked)
+   
     const hourLimit = new Date(`${dateToday}T23:00:00.000Z`)
     const closingDayData = {
       fireDate:  datePiked || new Date(`${dateToday}T22:20:00.000Z`),//19:20:00
@@ -212,7 +212,6 @@ export  function CreateAlarms() {
     if(datePiked){
       const hourPiked = datePiked.getHours();
       const minutesPiked = zeroInMinutes(datePiked);
-      console.log(hourPiked)
       if(datePiked < currentDate) {
         Alert.alert(
           'Olá Tryber!',
