@@ -17,8 +17,22 @@ interface IDataProps  {
 
 
 export function ListAlarms() {
+
   const [alarms, setAlarms] = useState<IDataProps[]>([]);
+
   async function listAllAlarm() {
+    const alarmsList = await ReactNativeAN.getScheduledAlarms();
+    
+    alarmsList.forEach((alarm: IDataProps )=> {
+      //Remove automaticamente o alarm 10 minutos depois de disparar.
+      const dateAlarm = new Date(`${alarm.year}-${alarm.month}-${alarm.day}T${alarm.hour + 3}:${alarm.minute + 10}:00.000Z`);
+      const dateNow = new Date();
+
+      if(dateAlarm < dateNow){
+        ReactNativeAN.deleteAlarm(Number(alarm.id));
+      }
+    });
+    
    setAlarms(await ReactNativeAN.getScheduledAlarms());
   }
   listAllAlarm();

@@ -54,7 +54,6 @@ export  function CreateAlarms() {
 
   async function initialMentoringAlert(){
     const alarms = await ReactNativeAN.getScheduledAlarms()
-    console.log("today", dateToday);
     const initialMentoringData = {
       isoDate: new Date(`${dateToday}T15:50:00.000Z`),//12:50:00,
       message: 'Mentoria das 13h00 vai começar!'
@@ -115,7 +114,7 @@ export  function CreateAlarms() {
       }
 
       const hourPiked = datePiked.getHours();
-      console.log("hourPiked", datePiked);
+
       const minutesPiked = zeroInLessTen(datePiked.getMinutes());
       if(hourPiked >= 15 && hourPiked < 17){
         handleCreateAlarm(liveClassData)
@@ -281,7 +280,7 @@ export  function CreateAlarms() {
 
     if(datePiked) {
       const alarmDate = minutesMinusTen(datePiked);
-      console.log("aqui", datePiked)
+      
       if(dataAlarm!.message === liveClassMessage  && alarmDate){
         liveClassAlert(alarmDate);
 
