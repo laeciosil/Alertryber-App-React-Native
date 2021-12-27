@@ -3,20 +3,20 @@ import { FlatList, FlatListProps } from 'react-native';
 
 interface IDataProps  {
   id: string;
-  hour: string;
-  date: string;
-  day: string;
-  month: string;
-  year: string;
-  minute: string;
+  hour: number;
+  minute: number;
+  day: number;
+  month: number;
+  year: number;
   message: string;
+  
 }
 
 
 
 
 export const Container = styled.View``;
-export const Text = styled.Text``;
+
 export const AlarmList = styled(
   FlatList as new (props: FlatListProps<IDataProps>) => FlatList<IDataProps>
 ).attrs({

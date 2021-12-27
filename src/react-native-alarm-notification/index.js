@@ -82,7 +82,7 @@ ReactNativeAN.scheduleAlarm = async (details, messageAlarm) => {
 		repeat_interval: details.repeat_interval || 'hourly',
 		interval_value: details.interval_value || 0,
 		sound_name: details.sound_name || '',
-		snooze_interval: details.snooze_interval || 1,
+		snooze_interval: details.snooze_interval || 10,
 		data: details.data || '',
 		
 	};

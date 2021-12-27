@@ -1,8 +1,8 @@
 import sub from "date-fns/sub";
-import { zeroInMinutes } from "./zeroInMinutes";
+import { zeroInLessTen } from "./zeroInLessTen";
 export function minutesMinusTen(isoDate: Date) {
   const dateFormatted = sub(isoDate, { minutes: 10 });
-  let minutes = zeroInMinutes(dateFormatted.getMinutes());
+  let minutes = dateFormatted.getMinutes();
   let hours = dateFormatted.getHours();
   let day = dateFormatted.getDate();
 
@@ -19,6 +19,6 @@ export function minutesMinusTen(isoDate: Date) {
     hours = 2;
   }
 
- return new Date(`${isoDate.getFullYear()}-${isoDate.getMonth() + 1}-${day}T${hours}:${minutes}:00.000Z`);
+ return new Date(`${isoDate.getFullYear()}-${zeroInLessTen(isoDate.getMonth() + 1)}-${zeroInLessTen(day)}T${zeroInLessTen(hours)}:${zeroInLessTen(minutes)}:00.000Z`);
   
 }

@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import ReactNativeAN from '../../react-native-alarm-notification';
 import { minutesMinusTen } from '../../services/minutesMinusTen';
-import { zeroInMinutes } from '../../services/zeroInMinutes';
+import { zeroInLessTen } from '../../services/zeroInLessTen';
 
 import { 
   Container, 
@@ -24,7 +24,7 @@ export  function CreateAlarms() {
   
   useEffect(() => {
     const currentDate = new Date();
-    const today = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+    const today = `${currentDate.getFullYear()}-${zeroInLessTen(currentDate.getMonth() + 1)}-${zeroInLessTen(currentDate.getDate())}`;
     setCurrentDate(currentDate);
     setDateToday(today);
   }, []);
@@ -116,7 +116,7 @@ export  function CreateAlarms() {
 
       const hourPiked = datePiked.getHours();
       console.log("hourPiked", datePiked);
-      const minutesPiked = zeroInMinutes(datePiked.getMinutes());
+      const minutesPiked = zeroInLessTen(datePiked.getMinutes());
       if(hourPiked >= 15 && hourPiked < 17){
         handleCreateAlarm(liveClassData)
         finalMentoringAlert();
@@ -209,7 +209,7 @@ export  function CreateAlarms() {
     }
     if(datePiked){
       const hourPiked = datePiked.getHours();
-      const minutesPiked = zeroInMinutes(datePiked.getMinutes());
+      const minutesPiked = zeroInLessTen(datePiked.getMinutes());
       if(datePiked < currentDate!) {
         Alert.alert(
           'Olá Tryber!',
@@ -281,6 +281,7 @@ export  function CreateAlarms() {
 
     if(datePiked) {
       const alarmDate = minutesMinusTen(datePiked);
+      console.log("aqui", datePiked)
       if(dataAlarm!.message === liveClassMessage  && alarmDate){
         liveClassAlert(alarmDate);
 

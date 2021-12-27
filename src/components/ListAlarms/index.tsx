@@ -2,19 +2,17 @@ import React, { useState } from "react";
 import ReactNativeAN from '../../react-native-alarm-notification';
 
 import { AlarmItem } from "../AlarmItem";
-import {Container, Text, AlarmList} from "./styles";
-function handleRemoveAlarm(id: string) {
-  ReactNativeAN.deleteAlarm(Number(id));
- }
+import {Container, AlarmList} from "./styles";
+
 interface IDataProps  {
   id: string;
-  hour: string;
-  day: string;
-  date: string;
-  month: string;
-  year: string;
-  minute: string;
+  hour: number;
+  minute: number;
+  day: number;
+  month: number;
+  year: number;
   message: string;
+  
 }
 
 
