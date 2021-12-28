@@ -53,7 +53,7 @@ export  function CreateAlarms() {
   };
 
   async function initialMentoringAlert(){
-    const alarms = await ReactNativeAN.getScheduledAlarms()
+    const alarms = await ReactNativeAN.getScheduledAlarms();
     const initialMentoringData = {
       isoDate: new Date(`${dateToday}T15:50:00.000Z`),//12:50:00,
       message: 'Mentoria das 13h00 vai começar!'
@@ -78,8 +78,9 @@ export  function CreateAlarms() {
   };
 
   async function initialMomentAlert() {
-    const alarms = await ReactNativeAN.getScheduledAlarms()
+    const alarms = await ReactNativeAN.getScheduledAlarms();
     const initialMomentData = {
+      //data no formato UTC
      isoDate: new Date(`${dateToday}T16:50:00.000Z`),//13:50:00
      message: 'Momento inicial vai começar!',
     }
@@ -93,7 +94,7 @@ export  function CreateAlarms() {
   };
 
   async function liveClassAlert(datePiked: Date | undefined) {
-    const alarms = await ReactNativeAN.getScheduledAlarms()
+    const alarms = await ReactNativeAN.getScheduledAlarms();
     const liveClassData = {
       isoDate: datePiked || new Date(`${dateToday}T19:10:00.000Z`),//16:10:00
       message: 'Aula ao vivo vai começar!',
@@ -155,7 +156,8 @@ export  function CreateAlarms() {
         return
       }
      
-    }
+    };
+
     setDataAlarm(liveClassData);
     const alarmFind = alarms.find((alarm: IAlarmProps) => alarm.message === liveClassData.message);
     if(liveClassData.isoDate.getTime() < currentDate!.getTime() || alarmFind){
@@ -167,7 +169,7 @@ export  function CreateAlarms() {
           {text: "Não", onPress: () => {showDateTimePicker()}},
           {text: "Sim", onPress: () => 
             {
-            handleCreateAlarm(liveClassData), 
+              handleCreateAlarm(liveClassData), 
               finalMentoringAlert()
             }
           },
@@ -201,7 +203,7 @@ export  function CreateAlarms() {
    
   async function closingDayAlert(datePiked: Date | undefined)   {
    
-    const hourLimit = new Date(`${dateToday}T23:00:00.000Z`)
+    const hourLimit = new Date(`${dateToday}T23:00:00.000Z`);
     const closingDayData = {
       isoDate:  datePiked || new Date(`${dateToday}T22:20:00.000Z`),//19:20:00
       message: 'Fechamento vai começar!',
@@ -254,10 +256,11 @@ export  function CreateAlarms() {
         return
       }
      
-    }
+    };
+
     setDataAlarm(closingDayData);
     
-      const alarms = await ReactNativeAN.getScheduledAlarms()
+      const alarms = await ReactNativeAN.getScheduledAlarms();
       const alarmFind = alarms.find((alarm: IAlarmProps) => alarm.message === closingDayData.message);
         
       if(alarmFind){
@@ -272,7 +275,7 @@ export  function CreateAlarms() {
             {text: "Sim", onPress: () => handleCreateAlarm(closingDayData)},
           ]);
       }
-  } 
+  } ;
  
   function handleHourPikedUser(datePiked: Date | undefined) {
     hideDateTimePicker();
@@ -296,7 +299,7 @@ export  function CreateAlarms() {
       closingDayAlert(undefined);
     }
     
-  }
+  };
   
   return (
     <Container>

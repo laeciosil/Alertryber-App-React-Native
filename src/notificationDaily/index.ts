@@ -1,4 +1,4 @@
-//import { Alert } from "react-native";
+import { Alert } from "react-native";
 import PushNotification from "react-native-push-notification";
 
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
@@ -12,9 +12,9 @@ PushNotification.configure({
   onNotification: function (notification) {
 //console.log("NOTIFICATION:", notification);
 
-    // if(notification.foreground) {
-    //   Alert.alert({notification.message});
-    // }
+    if(notification.foreground) {
+      Alert.alert(String(notification.message));
+    }
 
     // (required) Called when a remote is received or opened, or local notification is opened
     // notification.finish(PushNotificationIOS.FetchResult.NoData);

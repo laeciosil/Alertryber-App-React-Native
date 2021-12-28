@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReactNativeAN from '../../react-native-alarm-notification';
 import { zeroInLessTen } from "../../services/zeroInLessTen";
 
