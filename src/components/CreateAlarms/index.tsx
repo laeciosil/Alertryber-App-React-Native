@@ -46,7 +46,7 @@ export  function CreateAlarms() {
        message
       );
     } catch (error) {
-      console.log('Failed to schedule alarm: ', error);
+      //console.log('Failed to schedule alarm: ', error);
     }
 
     hideDateTimePicker();

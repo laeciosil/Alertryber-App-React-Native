@@ -23,8 +23,8 @@ export function ListAlarms() {
   async function listAllAlarm() {
     const alarmsList = await ReactNativeAN.getScheduledAlarms();
     
+    //Remove automaticamente o alarme uma hora depois de disparar.
     alarmsList.forEach((alarm: IDataProps )=> {
-      //Remove automaticamente o alarme 10 minutos depois de disparar.
       const dateAlarm = new Date(`${alarm.year}-${alarm.month}-${alarm.day}T${alarm.hour + 4}:${alarm.minute}:00.000Z`);
       const dateNow = new Date();
 
