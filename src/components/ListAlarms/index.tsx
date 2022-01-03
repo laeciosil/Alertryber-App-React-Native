@@ -20,7 +20,7 @@ export function ListAlarms() {
 
   const [alarms, setAlarms] = useState<IDataProps[]>([]);
 
-  async function listAllAlarm() {
+  async function listAllAlarms() {
     const alarmsList = await ReactNativeAN.getScheduledAlarms();
     
     //Remove automaticamente o alarme uma hora depois de disparar.
@@ -35,7 +35,7 @@ export function ListAlarms() {
     
    setAlarms(await ReactNativeAN.getScheduledAlarms());
   }
-  listAllAlarm();
+  listAllAlarms();
   return (
     <Container>
      <AlarmList 
